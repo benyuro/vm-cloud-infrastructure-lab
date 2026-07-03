@@ -174,7 +174,35 @@ Potential improvements to the infrastructure include:
 
 ---
 
-## 9. Architecture Status
+
+## 9. Initial Resource Allocation
+
+Virtual machine resources were allocated based on the expected workload of each server and the available capacity of the physical host system.
+
+The host system has 16 GB of physical memory, 2 physical CPU cores, 4 logical processors, and approximately 93.9 GB of available disk space at the beginning of the project.
+
+To maintain sufficient resources for the host operating system and local development tools, the initial virtual machine memory allocation is limited to a total of 8 GB.
+
+| Server |  RAM | vCPU | Virtual Disk | Role            |
+| ------ | ---: | ---: | -----------: | --------------- |
+| LB01   | 1 GB |    1 |        15 GB | Load Balancer   |
+| WEB01  | 2 GB |    1 |        20 GB | Web Server      |
+| WEB02  | 2 GB |    1 |        20 GB | Web Server      |
+| DB01   | 3 GB |    1 |        30 GB | Database Server |
+
+### Resource Allocation Rationale
+
+DB01 receives the largest memory and storage allocation because database workloads may benefit from additional memory for caching and query processing and require storage for database files and logs.
+
+WEB01 and WEB02 receive identical resources because both servers perform the same role in the active-active web tier. Consistent resource allocation helps maintain similar backend capacity across both web servers.
+
+LB01 receives fewer resources because its primary responsibility is receiving and forwarding application traffic rather than running the application or storing application data.
+
+The virtual disks will use dynamic allocation. Configured virtual disk capacity therefore represents the maximum size each disk may grow to and not the initial physical disk space consumed on the host.
+
+These resource allocations are initial capacity estimates. Resource utilisation will be monitored during the project and the allocations may be reviewed if CPU, memory, or storage constraints are identified.
+
+## 10. Architecture Status
 
 **Status:** Initial Design
 
